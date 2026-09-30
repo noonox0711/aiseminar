@@ -96,8 +96,6 @@ import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, serve
 // 세미나·라이브 목록. 새 행사가 생기면 여기에 한 줄 추가한다. id 는 영문 소문자·숫자·하이픈만(40자 이내).
 const EVENTS = [
   { id: "260930-wonjang-live", label: "원장일지 라이브 · 코덱스로 받고 클로드코드로 정리하기 (2026. 9. 30.)" },
-  { id: "chogangs-webpage",    label: "초강스 AI 중급 세미나 · 웹페이지 만들기" },
-  { id: "chogangs-blog",       label: "초강스 AI 중급 세미나 · 블로그 자동화" },
 ];
 
 const app = initializeApp({
@@ -119,6 +117,9 @@ for (const e of EVENTS) {
 // 자료 페이지에서 넘어오면 ?e=행사id 로 미리 골라 둔다
 const pre = new URLSearchParams(location.search).get("e");
 if (pre && EVENTS.some(e => e.id === pre)) $("event").value = pre;
+else if (EVENTS.length === 1) $("event").value = EVENTS[0].id;
+// 행사가 하나뿐이면 "세미나별로 보기"는 숨긴다
+if (EVENTS.length < 2) $("filter").hidden = true;
 
 $("text").addEventListener("input", () => { $("cnt").textContent = $("text").value.length; });
 
